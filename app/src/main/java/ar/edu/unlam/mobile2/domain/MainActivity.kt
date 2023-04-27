@@ -12,18 +12,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.TabRowDefaults
 
 import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
-import androidx.compose.material3.ExperimentalMaterial3Api
 
 import androidx.compose.material.TabRow
-import androidx.compose.material.LeadingIconTab
-import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 
 import androidx.compose.material3.Text
 
@@ -35,15 +29,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ar.edu.unlam.mobile2.R
-import ar.edu.unlam.mobile2.data.Articulo
-import ar.edu.unlam.mobile2.data.ArticuloRepository
+import ar.edu.unlam.mobile2.data.ArticuloApiModel
+import ar.edu.unlam.mobile2.repository.ArticuloRepository
 import ar.edu.unlam.mobile2.data.Tabs_item
+import ar.edu.unlam.mobile2.repository.MediaStackApi
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,17 +62,17 @@ fun MyFilterList() {
 @Preview(showSystemUi = true)
 @Composable
 fun MyApp() {
-    AppContainer(ArticuloRepository.articulos)
+    AppContainer(ArticuloRepository.articuloApiModels)
 }
 
 @Composable
-fun AppContainer(articulos: List<Articulo>) {
+fun AppContainer(articuloApiModels: List<ArticuloApiModel>) {
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
     ) {
 
-        items(articulos) { articulo ->
+        items(articuloApiModels) { articulo ->
             Cards(articulo)
         }
     }
@@ -83,13 +80,13 @@ fun AppContainer(articulos: List<Articulo>) {
 
 
 @Composable
-fun Cards(articulo: Articulo) {
+fun Cards(articuloApiModel: ArticuloApiModel) {
     Card(
         modifier = Modifier
             .height(200.dp)
             .padding(10.dp)
     ) {
-        ItemsNews(articulo)
+        ItemsNews(articuloApiModel)
     }
 }
 
@@ -99,7 +96,7 @@ fun MyText(text: String) {
 }
 
 @Composable
-fun ItemsNews(articulo: Articulo) {
+fun ItemsNews(articuloApiModel: ArticuloApiModel) {
     Column(modifier = Modifier.padding(10.dp)) {
         Image(
             painter = painterResource(id = R.drawable.ic_launcher_background),
@@ -108,8 +105,8 @@ fun ItemsNews(articulo: Articulo) {
                 .fillMaxWidth()
                 .padding(bottom = 10.dp)
         )
-        MyText(text = articulo.topic)
-        MyText(text = articulo.titulo)
+        MyText(text = articuloApiModel.topic)
+        MyText(text = articuloApiModel.titulo)
     }
 }
 
