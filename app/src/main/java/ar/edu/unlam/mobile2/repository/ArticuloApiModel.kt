@@ -1,12 +1,12 @@
-package ar.edu.unlam.mobile2.data
+package ar.edu.unlam.mobile2.repository
 
-data class ArticuloApiModel(
-    val autor: String = "autor",
-    val titulo: String = "titulo",
-    val description: String = "description",
-    val fuente: String = "fuente",
-    val imagen: String = "imagen",
-    val topic: String = "topic",
-    val pais: String = "ar",
-    val fecha: String = "fecha"
-    )
+data class ArticuloApiModel
+    (
+    val title: String,
+    val description: String,
+    val url: String,
+    val image: String,
+    val publishedAt:String
+){
+
+}
