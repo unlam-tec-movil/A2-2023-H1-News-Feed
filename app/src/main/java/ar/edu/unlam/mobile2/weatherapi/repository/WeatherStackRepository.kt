@@ -1,7 +1,7 @@
 package ar.edu.unlam.mobile2.weatherapi.repository
 
-import ar.edu.unlam.mobile2.weatherapi.data.WeatherResponse
-import javax.inject.Inject
+import ar.edu.unlam.mobile2.weatherapi.data.api.WeatherApiService
+import ar.edu.unlam.mobile2.weatherapi.data.api.response.WeatherResponse
 
 class WeatherStackRepository(private val api: WeatherApiService) {
 

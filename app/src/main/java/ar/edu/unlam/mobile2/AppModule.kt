@@ -7,7 +7,7 @@ import ar.edu.unlam.mobile2.mediastackapi.data.api.MediastackApi
 import ar.edu.unlam.mobile2.mediastackapi.data.NewRepository
 import ar.edu.unlam.mobile2.mediastackapi.data.local.NewDao
 import ar.edu.unlam.mobile2.mediastackapi.data.local.NewDatabase
-import ar.edu.unlam.mobile2.weatherapi.repository.WeatherApiService
+import ar.edu.unlam.mobile2.weatherapi.data.api.WeatherApiService
 import ar.edu.unlam.mobile2.weatherapi.repository.WeatherStackRepository
 import dagger.Module
 import dagger.Provides

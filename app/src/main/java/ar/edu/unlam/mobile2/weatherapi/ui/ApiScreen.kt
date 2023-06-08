@@ -11,7 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ar.edu.unlam.mobile2.weatherapi.data.WeatherResponse
+import ar.edu.unlam.mobile2.weatherapi.data.api.response.WeatherResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
