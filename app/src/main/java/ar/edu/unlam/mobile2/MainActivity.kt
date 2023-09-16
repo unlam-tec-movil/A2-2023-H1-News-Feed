@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -38,9 +39,11 @@ import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -75,6 +78,7 @@ class MainActivity : ComponentActivity() {
             application, "719d2c40-5de1-44d8-980d-aded581ac26d",
             Analytics::class.java, Crashes::class.java
         )
+        installSplashScreen()
         setContent {
             Mobile2_ScaffoldingTheme {
                 PantallaPrincipal(weatherViewModel = weatherViewModel, viewModel = newViewModel)
@@ -196,22 +200,19 @@ fun PantallaPrincipal(weatherViewModel: WeatherViewModel, viewModel: NewsViewMod
 }
 
 @Composable
-fun BotonFlotante(navController: NavHostController) {
-    FloatingActionButton(
-        modifier = Modifier.size(55.dp,55.dp),
-        containerColor = MaterialTheme.colorScheme.primary,
-        onClick = {
-            navController.navigate("pantalla4")
-        }
-        ) {
-        Icon(
-            imageVector = Icons.Filled.Add,
-            contentDescription = "Anadir",
-            tint = Color.Black
-        )
-
-    }
+fun BotonFlotante(navController: NavHostController){
+  FloatingActionButton(
+      modifier = Modifier.size(50.dp,50.dp),
+      containerColor = MaterialTheme.colorScheme.primary,
+      onClick = {navController.navigate("pantalla4")})
+  {
+      Icon(
+          imageVector = Icons.Filled.Add,
+          contentDescription = "Anadir",
+          tint = Color.Black)
+  }
 }
+
 
 @Composable
 fun currentRoute(navController: NavHostController): String? {
