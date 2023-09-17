@@ -21,6 +21,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Scaffold
+import androidx.compose.material.ScaffoldState
+import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -62,7 +64,8 @@ import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.analytics.Analytics
 import com.microsoft.appcenter.crashes.Crashes
 import dagger.hilt.android.AndroidEntryPoint
-
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -198,11 +201,11 @@ fun PantallaPrincipal(weatherViewModel: WeatherViewModel, viewModel: NewsViewMod
             }
         },
         bottomBar = { NavegacionInferior(navController, navegationItem) },
-        floatingActionButton = { BotonFlotante(navController)},
+        floatingActionButton = { BotonFlotante(scope,scaffoldState,navController)},
     )
 }
 
-/*@Composable
+@Composable
 fun BotonFlotante(
     scope: CoroutineScope,
     scaffoldState: ScaffoldState,
@@ -223,9 +226,9 @@ fun BotonFlotante(
               tint = Color.Black)
 
     }
-}*/
+}
 
-@Composable
+/*@Composable
 fun BotonFlotante(navController: NavHostController){
 
       FloatingActionButton(
@@ -238,7 +241,7 @@ fun BotonFlotante(navController: NavHostController){
               contentDescription = "Anadir",
               tint = Color.Black)
       }
-}
+}*/
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(ExperimentalPermissionsApi::class)
