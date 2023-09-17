@@ -53,6 +53,10 @@ android {
 }
 
 dependencies {
+
+    //permisos
+    implementation "com.google.accompanist:accompanist-permissions:0.29.1-alpha"
+
     //collapsing topappbar
     implementation "com.google.accompanist:accompanist-swiperefresh:0.18.0"
 
