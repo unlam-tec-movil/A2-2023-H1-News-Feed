@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Scaffold
@@ -38,6 +39,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -60,12 +62,14 @@ import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
+import com.google.maps.android.compose.GoogleMap
 import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.analytics.Analytics
 import com.microsoft.appcenter.crashes.Crashes
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.nio.file.WatchEvent
 
 
 @AndroidEntryPoint
@@ -156,7 +160,8 @@ fun PantallaPrincipal(weatherViewModel: WeatherViewModel, viewModel: NewsViewMod
     val navegationItem = listOf(
         ItemsMenu.Pantalla1,
         ItemsMenu.Pantalla2,
-        ItemsMenu.Pantalla3
+        ItemsMenu.Pantalla3,
+        ItemsMenu.PantallaGoogle
     )
 
     Scaffold(
@@ -212,7 +217,9 @@ fun BotonFlotante(
     navController: NavHostController
 ){
     FloatingActionButton(
-          modifier = Modifier.size(50.dp,50.dp),
+          modifier = Modifier
+              .size(50.dp, 50.dp)
+              .clip(CircleShape),
           containerColor = MaterialTheme.colorScheme.primary,
           onClick = {navController.navigate("pantalla4");
               scope.launch { scaffoldState.snackbarHostState.showSnackbar("Agregar noticia"

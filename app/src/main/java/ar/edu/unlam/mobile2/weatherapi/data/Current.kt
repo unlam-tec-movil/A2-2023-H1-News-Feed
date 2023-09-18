@@ -5,33 +5,33 @@ import com.google.gson.annotations.SerializedName
 
 data class Current(
     @SerializedName("cloudcover")
-    val cloudcover: Int,
+    val cloudcover: Double,
     @SerializedName("feelslike")
-    val feelslike: Int,
+    val feelslike: Double,
     @SerializedName("humidity")
-    val humidity: Int,
+    val humidity: Double,
     @SerializedName("observation_time")
     val observationTime: String,
     @SerializedName("precip")
-    val precip: Int,
+    val precip: Double,
     @SerializedName("pressure")
-    val pressure: Int,
+    val pressure: Double,
     @SerializedName("temperature")
-    val temperature: Int,
+    val temperature: Double,
     @SerializedName("uv_index")
-    val uvIndex: Int,
+    val uvIndex: Double,
     @SerializedName("visibility")
-    val visibility: Int,
+    val visibility: Double,
     @SerializedName("weather_code")
-    val weatherCode: Int,
+    val weatherCode: Double,
     @SerializedName("weather_descriptions")
     val weatherDescriptions: List<String>,
     @SerializedName("weather_icons")
     val weatherIcons: List<String>,
     @SerializedName("wind_degree")
-    val windDegree: Int,
+    val windDegree: Double,
     @SerializedName("wind_dir")
     val windDir: String,
     @SerializedName("wind_speed")
-    val windSpeed: Int
+    val windSpeed: Double
 )

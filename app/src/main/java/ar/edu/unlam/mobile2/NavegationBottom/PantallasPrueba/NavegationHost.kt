@@ -31,6 +31,10 @@ fun NavegationHost(navHostController: NavHostController, weatherViewModel: Weath
         composable(ItemsMenu.Pantalla4.ruta){
             Anadir()
         }
+        composable(ItemsMenu.PantallaGoogle.ruta){
+            MyGoogleMap()
+        }
+
         }
 
     }
