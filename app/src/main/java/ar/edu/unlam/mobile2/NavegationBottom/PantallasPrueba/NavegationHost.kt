@@ -5,6 +5,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import ar.edu.unlam.mobile2.NavegationBottom.ItemMenuDW
 import ar.edu.unlam.mobile2.NavegationBottom.ItemsMenu
 import ar.edu.unlam.mobile2.mediastackapi.New
 import ar.edu.unlam.mobile2.mediastackapi.viewmodel.NewsViewModel
@@ -31,7 +32,7 @@ fun NavegationHost(navHostController: NavHostController, weatherViewModel: Weath
         composable(ItemsMenu.Pantalla4.ruta){
             Anadir()
         }
-        composable(ItemsMenu.PantallaGoogle.ruta){
+        composable(ItemMenuDW.PantallaGoogle.ruta){
             MyGoogleMap()
         }
 

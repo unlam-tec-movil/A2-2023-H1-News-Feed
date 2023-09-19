@@ -3,22 +3,26 @@ package ar.edu.unlam.mobile2
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
+import android.widget.AdapterView.OnItemClickListener
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Scaffold
@@ -27,6 +31,7 @@ import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.FloatingActionButton
@@ -41,6 +46,7 @@ import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -49,6 +55,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import ar.edu.unlam.mobile2.NavegationBottom.ItemMenuDW
 import ar.edu.unlam.mobile2.NavegationBottom.ItemsMenu
 import ar.edu.unlam.mobile2.NavegationBottom.PantallasPrueba.NavegationHost
 import ar.edu.unlam.mobile2.Tabs.repository.Tabs_item
@@ -62,14 +69,12 @@ import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import com.google.maps.android.compose.GoogleMap
 import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.analytics.Analytics
 import com.microsoft.appcenter.crashes.Crashes
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import java.nio.file.WatchEvent
 
 
 @AndroidEntryPoint
@@ -96,7 +101,6 @@ class MainActivity : ComponentActivity() {
     }
 
 }
-
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Preview(showSystemUi = true)
@@ -161,13 +165,21 @@ fun PantallaPrincipal(weatherViewModel: WeatherViewModel, viewModel: NewsViewMod
         ItemsMenu.Pantalla1,
         ItemsMenu.Pantalla2,
         ItemsMenu.Pantalla3,
-        ItemsMenu.PantallaGoogle
+    )
+
+    val navigationItemMenuDW = listOf(
+        ItemMenuDW.PantallaGoogle
     )
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         backgroundColor = MaterialTheme.colorScheme.background,
         scaffoldState = scaffoldState,
+        drawerContent = { drawer(
+            scope,
+            scaffoldState,
+            navController,
+            menu_items = navigationItemMenuDW)},
         content = {
             Column(
                 Modifier
@@ -176,14 +188,22 @@ fun PantallaPrincipal(weatherViewModel: WeatherViewModel, viewModel: NewsViewMod
             ) {
                 TopAppBar(
                     backgroundColor = MaterialTheme.colorScheme.background
+
                 ) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(5.dp)
                             .padding(start = 5.dp)
-                            .clickable { navController.navigate("Pantalla1") },
+                            ,
                     ) {
+
+                       Icon(imageVector = Icons.Filled.Menu,
+                            contentDescription = "Boton Menu",
+                            tint = Color.White,
+                           modifier = Modifier.clickable { scope.launch { scaffoldState.drawerState.open() } })
+
+                        Spacer(modifier = Modifier.width(10.dp))
                         Icon(
                             painter = painterResource(id = R.drawable.unlam_blanco),
                             tint = Color.White,
@@ -194,8 +214,11 @@ fun PantallaPrincipal(weatherViewModel: WeatherViewModel, viewModel: NewsViewMod
                         Text(
                             text = "UNLaM News",
                             color = MaterialTheme.colorScheme.tertiary,
-                            modifier = Modifier.align(CenterVertically)
+                            modifier = Modifier
+                                .align(CenterVertically)
+                                .clickable { navController.navigate("Pantalla1") }
                         )
+
                     }
                 }
                 NavegationHost(
@@ -208,6 +231,58 @@ fun PantallaPrincipal(weatherViewModel: WeatherViewModel, viewModel: NewsViewMod
         bottomBar = { NavegacionInferior(navController, navegationItem) },
         floatingActionButton = { BotonFlotante(scope,scaffoldState,navController)},
     )
+}
+
+@Composable
+fun drawer(
+    scope: CoroutineScope,
+    scaffoldState: ScaffoldState,
+    navController: NavHostController,
+    menu_items: List<ItemMenuDW>){
+
+    Column {
+        
+        Image(painterResource(id = R.drawable.noticiasbanner_dw),
+            contentDescription = "Menu de opciones",
+            modifier = Modifier
+                .height(160.dp)
+                .fillMaxWidth(),
+            contentScale = ContentScale.FillWidth)
+        Spacer(modifier = Modifier
+            .fillMaxWidth()
+            .height(15.dp))
+
+        menu_items.forEach{item ->
+            drawerItem(item = item){
+                navController.navigate(item.ruta){
+                    launchSingleTop = true
+                }
+                scope.launch{
+                    scaffoldState.drawerState.close()
+                }
+            }
+        }
+    }
+
+}
+
+@Composable
+fun drawerItem(item: ItemMenuDW, onItemClick: (ItemMenuDW)-> Unit){
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp)
+            .padding(6.dp)
+            .clip(RoundedCornerShape(12))
+            .padding(8.dp)
+            .clickable { onItemClick(item) }
+    ) {
+        Image(painterResource(id = item.icono),
+            contentDescription = item.titulo)
+        Spacer(modifier = Modifier.width(12.dp))
+        Text(text = item.titulo,
+            style = MaterialTheme.typography.bodyLarge)
+    }
 }
 
 @Composable
@@ -249,6 +324,7 @@ fun BotonFlotante(navController: NavHostController){
               tint = Color.Black)
       }
 }*/
+
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(ExperimentalPermissionsApi::class)

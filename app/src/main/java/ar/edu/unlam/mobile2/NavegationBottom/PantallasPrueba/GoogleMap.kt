@@ -22,8 +22,9 @@ fun MyGoogleMap(){
     ) {
         Marker(
             state = MarkerState(position = argentina),
-            title = "Singapore",
-            snippet = "Marker in Singapore"
+            title = "Argentina",
+            snippet = "Buenos Aires"
         )
     }
 }
+
