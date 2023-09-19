@@ -1,5 +1,6 @@
 package ar.edu.unlam.mobile2.mediastackapi.viewmodel
 
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -17,8 +18,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NewsViewModel @Inject constructor(
-    private val getNews: GetNews
+    private val getNews: GetNews,
+
 ) : ViewModel() {
+
+
+
 
     private val _listaNoticias = MutableLiveData<List<New>>()
     val listaNoticias: LiveData<List<New>> = _listaNoticias
@@ -40,7 +45,30 @@ class NewsViewModel @Inject constructor(
             getNews.updateNew(item)
         }
     }
+     var notica:New = New(1,"null","null","null","null","null","null","null","null","null","null",)
 
+    fun resivirNoticia():New {
+        return this.notica
+    }
+
+    fun enviarNotica(item: New){
+        this.notica = item
+    }
+
+
+
+
+
+    private val _isFloatingButtonVisible = mutableStateOf(true)
+    val isFloatingButtonVisible: State<Boolean> = _isFloatingButtonVisible
+
+    fun hideFloatingButton() {
+        _isFloatingButtonVisible.value = false
+    }
+
+    fun showFloatingButton() {
+        _isFloatingButtonVisible.value = true
+    }
 
     init {
         viewModelScope.launch {

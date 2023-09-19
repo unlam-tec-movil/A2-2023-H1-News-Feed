@@ -13,12 +13,14 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import ar.edu.unlam.mobile2.detalle.NewDetailActivity
+import androidx.navigation.NavHostController
+import ar.edu.unlam.mobile2.NavegationBottom.PantallasPrueba.NavegationHost
+
 
 import ar.edu.unlam.mobile2.mediastackapi.viewmodel.NewsViewModel
 
 @Composable
-fun NewsList(viewModel: NewsViewModel, numero: Int) {
+fun NewsList(viewModel: NewsViewModel, numero: Int,navController: NavHostController) {
     val listaNoticias by viewModel.listaNoticias.observeAsState(emptyList())
     val context = LocalContext.current
 
@@ -45,7 +47,9 @@ fun NewsList(viewModel: NewsViewModel, numero: Int) {
 
                     },
                         onItemClick2 = {
-                            NewDetailActivity.start(context, item)
+                            viewModel.enviarNotica(item)
+                            navController.navigate("pantalla5")
+                            //NewDetailActivity.start(context, item)
                         })
                 }
             } else {
@@ -54,8 +58,11 @@ fun NewsList(viewModel: NewsViewModel, numero: Int) {
                         viewModel.actualizarItem(nuevoItem)
                         viewModel.actualizarItemEnBase(nuevoItem)
                     },
+
                         onItemClick2 = {
-                            NewDetailActivity.start(context, item)
+                            viewModel.enviarNotica(item)
+                            navController.navigate("pantalla5")
+                            //NewDetailActivity.start(context, item)
                         })
                 }
 

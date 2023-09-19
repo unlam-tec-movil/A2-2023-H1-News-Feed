@@ -12,7 +12,8 @@ import ar.edu.unlam.mobile2.weatherapi.ui.WeatherViewModel
 
 
 @Composable
-fun NavegationHost(navHostController: NavHostController, weatherViewModel: WeatherViewModel, viewModel: NewsViewModel) {
+fun NavegationHost(navHostController: NavHostController, weatherViewModel: WeatherViewModel, viewModel: NewsViewModel,new: New) {
+
 
     NavHost(
         navController = navHostController,
@@ -20,13 +21,25 @@ fun NavegationHost(navHostController: NavHostController, weatherViewModel: Weath
 
         ){
         composable(ItemsMenu.Pantalla1.ruta){
-            Inicio(weatherViewModel, viewModel)
+            viewModel.showFloatingButton()
+            Inicio(weatherViewModel, viewModel,navHostController)
         }
         composable(ItemsMenu.Pantalla2.ruta){
-            Favorito(viewModel = viewModel)
+            viewModel.showFloatingButton()
+            Favorito(viewModel = viewModel,navHostController)
         }
         composable(ItemsMenu.Pantalla3.ruta){
-            Filtro(viewModel)
+            viewModel.showFloatingButton()
+            Filtro(viewModel,navHostController)
+        }
+        composable(ItemsMenu.Pantalla4.ruta){
+            viewModel.hideFloatingButton()
+            Anadir(navHostController)
+        }
+        composable(ItemsMenu.Pantalla5.ruta){
+            viewModel.showFloatingButton()
+            var new2 = viewModel.resivirNoticia()
+            NoticaScreen(new2,navHostController)
         }
         }
 

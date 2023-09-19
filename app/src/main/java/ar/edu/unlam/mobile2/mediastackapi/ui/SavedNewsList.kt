@@ -16,7 +16,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import ar.edu.unlam.mobile2.detalle.NewDetailActivity
+import androidx.navigation.NavHostController
+
 import ar.edu.unlam.mobile2.mediastackapi.New
 import ar.edu.unlam.mobile2.mediastackapi.viewmodel.NewsViewModel
 import ar.edu.unlam.mobile2.theme.Mobile2_ScaffoldingTheme
@@ -37,7 +38,7 @@ fun MySavedNewsPreview() {
 
 
 @Composable
-fun SavedNewsList(viewModel: NewsViewModel) {
+fun SavedNewsList(viewModel: NewsViewModel,navController: NavHostController) {
     val listaNoticias by viewModel.listaNoticias.observeAsState(emptyList())
     val context = LocalContext.current
     val savedNewsSize = getSavedNewsCount(listaNoticias)
@@ -49,7 +50,9 @@ fun SavedNewsList(viewModel: NewsViewModel) {
                     viewModel.actualizarItem(nuevoItem)
                 },
                     onItemClick2 = {
-                        NewDetailActivity.start(context, item)
+
+                        viewModel.enviarNotica(item)
+                        navController.navigate("pantalla5")
                     })
             }
         }

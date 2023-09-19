@@ -3,9 +3,11 @@ package ar.edu.unlam.mobile2
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,18 +17,28 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.BackdropScaffoldState
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Scaffold
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -52,6 +64,13 @@ import com.microsoft.appcenter.analytics.Analytics
 import com.microsoft.appcenter.crashes.Crashes
 import dagger.hilt.android.AndroidEntryPoint
 
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -76,7 +95,7 @@ class MainActivity : ComponentActivity() {
 }
 
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+/*@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Preview(showSystemUi = true)
 @Composable
 fun MyPreview() {
@@ -120,17 +139,20 @@ fun MyPreview() {
                 }
 
             },
-            bottomBar = { NavegacionInferior(navController, navegationItem) },
+            bottomBar = { NavegacionInferior(navController, navegationItem,viewModel) },
         )
     }
 
 
 }
 
+ */
+
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun PantallaPrincipal(weatherViewModel: WeatherViewModel, viewModel: NewsViewModel) {
+
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
@@ -157,7 +179,8 @@ fun PantallaPrincipal(weatherViewModel: WeatherViewModel, viewModel: NewsViewMod
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(5.dp).padding(start = 5.dp),
+                            .padding(5.dp)
+                            .padding(start = 5.dp),
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.unlam_blanco),
@@ -166,18 +189,48 @@ fun PantallaPrincipal(weatherViewModel: WeatherViewModel, viewModel: NewsViewMod
                             modifier = Modifier.size(25.dp)
                         )
                         Spacer(modifier = Modifier.width(10.dp))
-                        Text(text = "UNLaM News", color = MaterialTheme.colorScheme.tertiary, modifier = Modifier.align(CenterVertically))
+                        Text(
+                            text = "UNLaM News",
+                            color = MaterialTheme.colorScheme.tertiary,
+                            modifier = Modifier.align(CenterVertically)
+                        )
                     }
                 }
+
                 NavegationHost(
                     navHostController = navController,
                     weatherViewModel = weatherViewModel,
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    new = viewModel.resivirNoticia()
                 )
             }
         },
-        bottomBar = { NavegacionInferior(navController, navegationItem) },
+        bottomBar = { NavegacionInferior(navController, navegationItem,viewModel) },
+        floatingActionButton = { BotonFlotante(navController,viewModel) }
     )
+}
+
+@Composable
+fun BotonFlotante(navController: NavHostController,viewModel: NewsViewModel) {
+
+    val isFloatingButtonVisible = viewModel.isFloatingButtonVisible.value
+    if (isFloatingButtonVisible) {
+        FloatingActionButton(
+            modifier = Modifier.size(55.dp, 55.dp),
+            containerColor = MaterialTheme.colorScheme.primary,
+            onClick = {
+
+                navController.navigate("pantalla4")
+            }
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Add,
+                contentDescription = "Anadir",
+                tint = Color.Black
+            )
+
+        }
+    }
 }
 
 @Composable
@@ -187,7 +240,10 @@ fun currentRoute(navController: NavHostController): String? {
 }
 
 @Composable
-fun NavegacionInferior(navController: NavHostController, menuItem: List<ItemsMenu>) {
+fun NavegacionInferior(navController: NavHostController, menuItem: List<ItemsMenu>,viewModel: NewsViewModel) {
+
+    val isFloatingButtonVisible = viewModel.isFloatingButtonVisible.value
+    if (isFloatingButtonVisible) {
     BottomAppBar(
         modifier = Modifier.fillMaxWidth(),
         containerColor = MaterialTheme.colorScheme.onBackground
@@ -215,20 +271,20 @@ fun NavegacionInferior(navController: NavHostController, menuItem: List<ItemsMen
 
             }
         }
-    }
+    }}
 }
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalPagerApi::class)
 @Composable
-fun Tabs_Principal(viewModel: NewsViewModel) {
+fun Tabs_Principal(viewModel: NewsViewModel,navController: NavHostController) {
     val tabs = listOf(
-        Tabs_item.item_general(viewModel),
-        Tabs_item.item_business(viewModel),
-        Tabs_item.item_entertainment(viewModel),
-        Tabs_item.item_health(viewModel),
-        Tabs_item.item_science(viewModel),
-        Tabs_item.item_sports(viewModel),
-        Tabs_item.item_technology(viewModel)
+        Tabs_item.item_general(viewModel,navController),
+        Tabs_item.item_business(viewModel,navController),
+        Tabs_item.item_entertainment(viewModel,navController),
+        Tabs_item.item_health(viewModel,navController),
+        Tabs_item.item_science(viewModel,navController),
+        Tabs_item.item_sports(viewModel,navController),
+        Tabs_item.item_technology(viewModel,navController)
 
 
     )
